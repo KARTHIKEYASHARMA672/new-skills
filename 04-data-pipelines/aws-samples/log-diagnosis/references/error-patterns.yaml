@@ -1,0 +1,193 @@
+# 已知错误模式库
+# Claude 拿到日志后对照匹配，快速归因。
+# 每个 pattern 的 regex 用于匹配 @message 内容。
+# severity: CRITICAL / HIGH / MEDIUM / LOW
+# 匹配后下钻：用 aws-troubleshooting skill 查 aws-knowledge MCP / SSM Automation。
+
+# ── Lambda ─────────────────────────────────────────────────
+
+- id: lambda-timeout
+  service: lambda
+  pattern: "Task timed out after \\d+\\.\\d+ seconds"
+  severity: HIGH
+  likely_cause: "函数执行超时——实际耗时超过配置的 timeout"
+  next_steps:
+    - "检查函数 timeout 配置 vs 实际 duration（从 REPORT 行读取）"
+    - "检查下游依赖（API、DB）是否有延迟"
+    - "如果在 VPC 内，检查是否有 NAT Gateway / VPC Endpoint"
+
+- id: lambda-oom
+  service: lambda
+  pattern: "Runtime\\.ExitError|signal: killed|out of memory|Cannot allocate memory"
+  severity: HIGH
+  likely_cause: "函数内存不足（OOM Kill）"
+  next_steps:
+    - "对比 @maxMemoryUsed vs @memorySize（REPORT 行）"
+    - "增加 memorySize 配置"
+    - "检查是否有内存泄漏（多次调用内存递增）"
+
+- id: lambda-import-error
+  service: lambda
+  pattern: "Unable to import module|ModuleNotFoundError|Cannot find module"
+  severity: HIGH
+  likely_cause: "Lambda 部署包缺少依赖模块"
+  next_steps:
+    - "检查部署包是否包含所有依赖"
+    - "检查 runtime 版本兼容性"
+    - "Layer 是否正确附加"
+
+- id: lambda-throttle
+  service: lambda
+  pattern: "Rate exceeded|TooManyRequestsException|Throttling"
+  severity: MEDIUM
+  likely_cause: "Lambda 并发限制触发节流"
+  next_steps:
+    - "检查账号/函数级并发配额"
+    - "检查 reserved concurrency 设置"
+    - "考虑使用 provisioned concurrency"
+
+- id: lambda-permission-denied
+  service: lambda
+  pattern: "AccessDeniedException|is not authorized to perform|Access Denied"
+  severity: HIGH
+  likely_cause: "Lambda 执行角色缺少必要权限"
+  next_steps:
+    - "检查 execution role 的 IAM policy"
+    - "确认 resource-based policy 是否允许"
+    - "检查 SCP 限制"
+
+# ── EKS / 容器 ─────────────────────────────────────────────
+
+- id: eks-oom-killed
+  service: eks
+  pattern: "OOMKilled|Out of memory|oom-kill|memory cgroup"
+  severity: HIGH
+  likely_cause: "容器内存超出 limits 设置"
+  next_steps:
+    - "kubectl describe pod 查看 resources.limits.memory"
+    - "kubectl top pod 查看当前实际内存使用"
+    - "增加 memory limit 或优化应用内存"
+
+- id: eks-crashloop
+  service: eks
+  pattern: "CrashLoopBackOff|Back-off restarting failed container"
+  severity: HIGH
+  likely_cause: "容器反复启动失败"
+  next_steps:
+    - "kubectl logs --previous 查看上一次容器日志"
+    - "kubectl describe pod 查看 Events 和 lastState"
+    - "匹配其他 error pattern（OOM? ImagePull? 应用错误?）"
+
+- id: eks-image-pull-fail
+  service: eks
+  pattern: "ImagePullBackOff|ErrImagePull|Failed to pull image|manifest unknown"
+  severity: HIGH
+  likely_cause: "无法拉取容器镜像"
+  next_steps:
+    - "确认镜像名:tag 是否存在于 ECR/registry"
+    - "检查 ECR 权限（node role 需要 ecr:GetDownloadUrlForLayer 等）"
+    - "检查 VPC 网络是否能访问 ECR（NAT / VPC Endpoint）"
+
+- id: eks-node-not-ready
+  service: eks
+  pattern: "NodeNotReady|node .* condition Ready.*False"
+  severity: CRITICAL
+  likely_cause: "EKS 节点进入 NotReady 状态"
+  next_steps:
+    - "kubectl describe node 查看 Conditions"
+    - "检查 EC2 实例状态（StatusCheckFailed?）"
+    - "检查 kubelet 日志"
+
+# ── ALB / ELB ──────────────────────────────────────────────
+
+- id: alb-5xx-spike
+  service: elb
+  pattern: "5\\d{2}|HTTP 5\\d{2}|502 Bad Gateway|504 Gateway Timeout"
+  severity: HIGH
+  likely_cause: "ALB 返回 5xx 错误"
+  next_steps:
+    - "区分 ALB 自身 5xx vs target 5xx（elb_status_code vs target_status_code）"
+    - "502 通常是 target 连接失败或返回非法响应"
+    - "504 通常是 target 响应超时"
+
+- id: alb-unhealthy-target
+  service: elb
+  pattern: "Health check failed|unhealthy|draining"
+  severity: MEDIUM
+  likely_cause: "ALB Target Group 中有不健康的 target"
+  next_steps:
+    - "aws elbv2 describe-target-health 查看具体 target 状态"
+    - "检查 health check 配置（路径、端口、阈值）"
+    - "检查 target 的 Security Group 是否放行 health check"
+
+# ── 通用模式 ───────────────────────────────────────────────
+
+- id: generic-connection-refused
+  service: "*"
+  pattern: "Connection refused|ECONNREFUSED|connect ECONNREFUSED"
+  severity: HIGH
+  likely_cause: "目标服务未监听或网络不通"
+  next_steps:
+    - "确认目标服务是否运行中"
+    - "检查 Security Group / NACL 是否放行端口"
+    - "检查 DNS 解析是否正确"
+
+- id: generic-connection-timeout
+  service: "*"
+  pattern: "Connection timed out|ETIMEDOUT|connect ETIMEDOUT|SocketTimeoutException"
+  severity: HIGH
+  likely_cause: "网络连接超时——路由不通或安全组阻断"
+  next_steps:
+    - "检查 Security Group 出入站规则"
+    - "检查路由表（是否有去目标的路由）"
+    - "VPC 内访问外网需要 NAT Gateway"
+
+- id: generic-access-denied
+  service: "*"
+  pattern: "AccessDenied|Forbidden|403|is not authorized|UnauthorizedAccess"
+  severity: MEDIUM
+  likely_cause: "权限不足"
+  next_steps:
+    - "确认调用方身份（IAM role/user）"
+    - "检查 IAM policy（identity-based + resource-based）"
+    - "检查 SCP、Permission Boundary、VPC Endpoint Policy"
+
+- id: generic-throttling
+  service: "*"
+  pattern: "Throttling|ThrottlingException|Rate exceeded|Too Many Requests|429"
+  severity: MEDIUM
+  likely_cause: "API 调用频率超限"
+  next_steps:
+    - "确认是哪个 AWS API 被节流"
+    - "实施指数退避重试"
+    - "检查 Service Quotas 是否需要提额"
+
+- id: generic-dns-failure
+  service: "*"
+  pattern: "NXDOMAIN|Name or service not known|getaddrinfo.*ENOTFOUND|Could not resolve host"
+  severity: HIGH
+  likely_cause: "DNS 解析失败"
+  next_steps:
+    - "确认域名拼写正确"
+    - "VPC 内检查 DNS 设置（enableDnsSupport / enableDnsHostnames）"
+    - "检查 Route 53 Private Hosted Zone 配置"
+
+- id: generic-disk-full
+  service: "*"
+  pattern: "No space left on device|ENOSPC|disk full"
+  severity: CRITICAL
+  likely_cause: "磁盘空间用尽"
+  next_steps:
+    - "df -h 确认磁盘使用率"
+    - "清理临时文件或日志"
+    - "EBS 卷需要扩容（modify-volume → growpart → resize2fs）"
+
+- id: generic-certificate-error
+  service: "*"
+  pattern: "certificate.*expired|SSL.*handshake|CERT_HAS_EXPIRED|unable to verify"
+  severity: HIGH
+  likely_cause: "TLS/SSL 证书问题（过期或不受信任）"
+  next_steps:
+    - "检查 ACM 证书状态和到期时间"
+    - "确认 CA 链完整"
+    - "检查时钟同步（NTP）"

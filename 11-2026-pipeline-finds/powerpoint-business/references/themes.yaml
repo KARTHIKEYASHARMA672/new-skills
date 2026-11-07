@@ -1,0 +1,1022 @@
+# PowerPoint Business Themes
+# 10 themes optimized for SVG-native slide generation (1280x720)
+# All colors are 6-digit hex WITHOUT # prefix unless noted
+
+themes:
+  corporate_blue:
+    name: Corporate Blue
+    description: Professional navy palette. Trustworthy, authoritative, suitable for investor decks, board reports, and enterprise pitches.
+    color_scheme:
+      primary: "1E3A5F"
+      secondary: "4A7FB5"
+      accent: "E8A838"
+      background: "FFFFFF"
+      card_bg: "F7F9FC"
+      text_primary: "1A1A2E"
+      text_secondary: "4A5568"
+      text_muted: "8896A6"
+      chart_colors:
+        - "1E3A5F"
+        - "4A7FB5"
+        - "E8A838"
+        - "2ECC71"
+        - "E74C3C"
+        - "9B59B6"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 8
+      shadow:
+        blur: 6
+        offset_y: 2
+        color: "1E3A5F"
+        opacity: 0.08
+      border_color: "E2E8F0"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 135
+        stops:
+          - [0, "1E3A5F"]
+          - [60, "2A5080"]
+          - [100, "4A7FB5"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "E8A838"]
+          - [100, "F0C060"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "F7F9FC"]
+          - [100, "EDF2F7"]
+    decoration:
+      pattern: none
+      icon_style: outline
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "FFFFFF"
+      section_divider:
+        background: "1E3A5F"
+        text_color: "FFFFFF"
+
+  warm_earth:
+    name: Warm Earth
+    description: Earthy brown and terracotta palette. Approachable, humanistic, ideal for HR, culture, education, and non-profit presentations.
+    color_scheme:
+      primary: "6B4C3B"
+      secondary: "8B6F5E"
+      accent: "C17A56"
+      background: "FFF8F0"
+      card_bg: "FFFFFF"
+      text_primary: "3D2B1F"
+      text_secondary: "6B5B50"
+      text_muted: "A89888"
+      chart_colors:
+        - "6B4C3B"
+        - "C17A56"
+        - "D4A574"
+        - "7BA05B"
+        - "5B8FA0"
+        - "A0745B"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 12
+      shadow:
+        blur: 8
+        offset_y: 3
+        color: "6B4C3B"
+        opacity: 0.06
+      border_color: "E8DDD0"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 150
+        stops:
+          - [0, "6B4C3B"]
+          - [50, "8B6048"]
+          - [100, "C17A56"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "C17A56"]
+          - [100, "D4A574"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "FFFFFF"]
+          - [100, "FFF3E8"]
+    decoration:
+      pattern: dots
+      icon_style: filled
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "FFF8F0"
+      section_divider:
+        background: "6B4C3B"
+        text_color: "FFF8F0"
+
+  minimal_white:
+    name: Minimal White
+    description: Black-on-white with a single configurable accent. Clean, focused, content-first. Suitable for any domain where content speaks louder than decoration.
+    color_scheme:
+      primary: "111111"
+      secondary: "555555"
+      accent: "2563EB"
+      background: "FFFFFF"
+      card_bg: "FFFFFF"
+      text_primary: "111111"
+      text_secondary: "555555"
+      text_muted: "999999"
+      chart_colors:
+        - "2563EB"
+        - "111111"
+        - "888888"
+        - "BBBBBB"
+        - "3B82F6"
+        - "555555"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 4
+      shadow:
+        blur: 0
+        offset_y: 0
+        color: "000000"
+        opacity: 0
+      border_color: "D0D0D0"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 180
+        stops:
+          - [0, "FFFFFF"]
+          - [100, "F5F5F5"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "2563EB"]
+          - [100, "3B82F6"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "FFFFFF"]
+          - [100, "FAFAFA"]
+    decoration:
+      pattern: none
+      icon_style: outline
+    slide_overrides:
+      cover:
+        background: "FFFFFF"
+        text_color: "111111"
+      section_divider:
+        background: "F5F5F5"
+        text_color: "111111"
+
+  tech_dark:
+    name: Tech Dark
+    description: Dark background with cyan/purple neon accents. Cutting-edge, futuristic. Ideal for product launches, tech demos, startup pitches, and developer-facing content.
+    color_scheme:
+      primary: "00D4FF"
+      secondary: "8B5CF6"
+      accent: "00D4FF"
+      background: "0F1419"
+      card_bg: "1A2332"
+      text_primary: "E8ECF1"
+      text_secondary: "8899AA"
+      text_muted: "7B8FA3"
+      chart_colors:
+        - "00D4FF"
+        - "8B5CF6"
+        - "10B981"
+        - "F59E0B"
+        - "EF4444"
+        - "EC4899"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 24
+      gradient_fill:
+        angle: 135
+        stops:
+          - [0, "1A2332", 0.96]
+          - [100, "1E2A3C", 0.92]
+      border_color: "2A3A4A"
+      border_width: 1
+      gap: 20
+    elevation:
+      shadow_sm:
+        blur: 4
+        offset_y: 2
+        color: "000000"
+        opacity: 0.12
+      shadow_md:
+        blur: 12
+        offset_y: 8
+        color: "000000"
+        opacity: 0.20
+      shadow_lg:
+        blur: 24
+        offset_y: 16
+        color: "000000"
+        opacity: 0.28
+    gradients:
+      cover_bg:
+        angle: 135
+        stops:
+          - [0, "0F1419"]
+          - [40, "141E2A"]
+          - [100, "1A2840"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "00D4FF"]
+          - [100, "8B5CF6"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "1A2332"]
+          - [100, "1E2A3C"]
+      glow:
+        angle: 135
+        stops:
+          - [0, "00D4FF"]
+          - [50, "5C7CFA"]
+          - [100, "8B5CF6"]
+    decoration:
+      pattern: grid
+      pattern_size: 40
+      pattern_opacity: 0.04
+      grain:
+        dot_radius: 0.5
+        spacing: 4
+        opacity: 0.06
+      glow_spots:
+        - cx: "15%"
+          cy: "20%"
+          r: "40%"
+          color: "00D4FF"
+          opacity: 0.12
+        - cx: "85%"
+          cy: "80%"
+          r: "35%"
+          color: "A78BFA"
+          opacity: 0.08
+        - cx: "50%"
+          cy: "10%"
+          r: "25%"
+          color: "10B981"
+          opacity: 0.05
+      curves:
+        - d: "M-100,500 C200,200 600,100 1380,300"
+          stroke_width: 120
+          opacity: 0.06
+          gradient: accent_bar
+        - d: "M-50,520 C220,220 620,120 1400,320"
+          stroke_width: 2
+          opacity: 0.15
+          gradient: accent_bar
+      icon_style: glow
+    badge_style:
+      bg: "0C1B2E"
+      border: "2A3A4A"
+      text_color: "00D4FF"
+      height: 28
+      border_radius: 14
+      font_size: 13
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "E8ECF1"
+      section_divider:
+        background: "0F1419"
+        text_color: "00D4FF"
+
+  emerald_gold:
+    name: Emerald Gold
+    description: Deep emerald green with warm gold accent. Growth-oriented, trustworthy yet dynamic. Ideal for sustainability reports, ESG presentations, fintech pitches, and growth-narrative decks.
+    color_scheme:
+      primary: "1A6B4A"
+      secondary: "2D9B6D"
+      accent: "D4A843"
+      background: "FFFFFF"
+      card_bg: "F5FAF7"
+      text_primary: "1A2E23"
+      text_secondary: "4A5E50"
+      text_muted: "88A090"
+      chart_colors:
+        - "1A6B4A"
+        - "2D9B6D"
+        - "D4A843"
+        - "3B82B0"
+        - "C25A4A"
+        - "8B6DB0"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 8
+      shadow:
+        blur: 6
+        offset_y: 2
+        color: "1A6B4A"
+        opacity: 0.08
+      border_color: "D8E8DD"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 135
+        stops:
+          - [0, "1A6B4A"]
+          - [55, "1E7F55"]
+          - [100, "2D9B6D"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "D4A843"]
+          - [100, "E0C060"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "F5FAF7"]
+          - [100, "EDF5F0"]
+    decoration:
+      pattern: none
+      icon_style: outline
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "FFFFFF"
+      section_divider:
+        background: "1A6B4A"
+        text_color: "FFFFFF"
+
+  royal_purple:
+    name: Royal Purple
+    description: Deep violet with warm amber accent. Creative, luxurious, innovative. Ideal for creative agency pitches, luxury brand presentations, innovation showcases, and consulting decks.
+    color_scheme:
+      primary: "5B2C87"
+      secondary: "7C4DBA"
+      accent: "E8A838"
+      background: "FFFFFF"
+      card_bg: "F8F5FC"
+      text_primary: "2A1845"
+      text_secondary: "5A4A6E"
+      text_muted: "9088A0"
+      chart_colors:
+        - "5B2C87"
+        - "7C4DBA"
+        - "E8A838"
+        - "2ECC71"
+        - "E74C3C"
+        - "3498DB"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 10
+      shadow:
+        blur: 8
+        offset_y: 2
+        color: "5B2C87"
+        opacity: 0.08
+      border_color: "E0D8EC"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 135
+        stops:
+          - [0, "5B2C87"]
+          - [50, "6A3A9A"]
+          - [100, "7C4DBA"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "E8A838"]
+          - [100, "F0C060"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "F8F5FC"]
+          - [100, "F0EAF6"]
+    decoration:
+      pattern: none
+      icon_style: outline
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "FFFFFF"
+      section_divider:
+        background: "5B2C87"
+        text_color: "FFFFFF"
+
+  sunset_coral:
+    name: Sunset Coral
+    description: Vibrant coral with teal contrast. Energetic, modern, attention-grabbing. Ideal for marketing campaigns, product launches, startup pitches, and event presentations.
+    color_scheme:
+      primary: "D65745"
+      secondary: "E88570"
+      accent: "2A9D8F"
+      background: "FFFAF8"
+      card_bg: "FFFFFF"
+      text_primary: "2E1A15"
+      text_secondary: "6B4A42"
+      text_muted: "A08880"
+      chart_colors:
+        - "D65745"
+        - "E88570"
+        - "2A9D8F"
+        - "E8A838"
+        - "5B7FC5"
+        - "9B6DB0"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 12
+      shadow:
+        blur: 8
+        offset_y: 3
+        color: "D65745"
+        opacity: 0.06
+      border_color: "F0DDD8"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 135
+        stops:
+          - [0, "D65745"]
+          - [50, "D86B55"]
+          - [100, "E88570"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "2A9D8F"]
+          - [100, "40B5A8"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "FFFFFF"]
+          - [100, "FFF5F0"]
+    decoration:
+      pattern: none
+      icon_style: filled
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "FFFFFF"
+      section_divider:
+        background: "D65745"
+        text_color: "FFFFFF"
+
+  nordic_sage:
+    name: Nordic Sage
+    description: Muted sage green with warm stone accent. Calm, grounded, sophisticated. Ideal for wellness, healthcare consulting, HR culture decks, and mindfulness-oriented presentations.
+    color_scheme:
+      primary: "4A7C5E"
+      secondary: "7BA68E"
+      accent: "C4956A"
+      background: "FAFBF8"
+      card_bg: "FFFFFF"
+      text_primary: "222E26"
+      text_secondary: "556B5C"
+      text_muted: "8EA090"
+      chart_colors:
+        - "4A7C5E"
+        - "7BA68E"
+        - "C4956A"
+        - "5B8FA0"
+        - "C25A6A"
+        - "8B7DB0"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 10
+      shadow:
+        blur: 6
+        offset_y: 2
+        color: "4A7C5E"
+        opacity: 0.06
+      border_color: "D8E0D8"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 150
+        stops:
+          - [0, "4A7C5E"]
+          - [50, "5A8E6E"]
+          - [100, "7BA68E"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "C4956A"]
+          - [100, "D4B08A"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "FFFFFF"]
+          - [100, "F5F8F5"]
+    decoration:
+      pattern: dots
+      icon_style: outline
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "FFFFFF"
+      section_divider:
+        background: "4A7C5E"
+        text_color: "FFFFFF"
+
+  ocean_teal:
+    name: Ocean Teal
+    description: Deep teal with amber accent. Fresh, trustworthy, professional. Ideal for healthcare, SaaS products, data platforms, and trust-oriented enterprise presentations.
+    color_scheme:
+      primary: "0B6E77"
+      secondary: "2A99A3"
+      accent: "E89040"
+      background: "FFFFFF"
+      card_bg: "F5FAFB"
+      text_primary: "0F2A2D"
+      text_secondary: "3D6068"
+      text_muted: "7A9AA0"
+      chart_colors:
+        - "0B6E77"
+        - "2A99A3"
+        - "E89040"
+        - "5B7FC5"
+        - "D65770"
+        - "8B6DB0"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 8
+      shadow:
+        blur: 6
+        offset_y: 2
+        color: "0B6E77"
+        opacity: 0.08
+      border_color: "D0E4E6"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 135
+        stops:
+          - [0, "0B6E77"]
+          - [50, "15808A"]
+          - [100, "2A99A3"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "E89040"]
+          - [100, "F0B060"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "F5FAFB"]
+          - [100, "EDF5F7"]
+    decoration:
+      pattern: none
+      icon_style: outline
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "FFFFFF"
+      section_divider:
+        background: "0B6E77"
+        text_color: "FFFFFF"
+
+  rose_dusk:
+    name: Rose Dusk
+    description: Deep rose with warm gold accent. Elegant, inviting, refined. Ideal for lifestyle brands, event planning, beauty industry, education, and community-oriented presentations.
+    color_scheme:
+      primary: "8E3B5A"
+      secondary: "C17A92"
+      accent: "C9A85C"
+      background: "FFFAF8"
+      card_bg: "FFFFFF"
+      text_primary: "2E1820"
+      text_secondary: "6B4A55"
+      text_muted: "A08890"
+      chart_colors:
+        - "8E3B5A"
+        - "C17A92"
+        - "C9A85C"
+        - "5B8FA0"
+        - "6B9B5A"
+        - "7C6DB0"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 12
+      shadow:
+        blur: 8
+        offset_y: 2
+        color: "8E3B5A"
+        opacity: 0.06
+      border_color: "ECD8E0"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 135
+        stops:
+          - [0, "8E3B5A"]
+          - [50, "A05068"]
+          - [100, "C17A92"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "C9A85C"]
+          - [100, "D8C080"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "FFFFFF"]
+          - [100, "FFF5F2"]
+    decoration:
+      pattern: none
+      icon_style: filled
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "FFFFFF"
+      section_divider:
+        background: "8E3B5A"
+        text_color: "FFFFFF"
+
+  zen_ink:
+    name: Zen Ink
+    description: Ink-wash aesthetic with generous whitespace. Calm, contemplative, rooted in East Asian visual tradition. Ideal for philosophy, literature, Chinese culture, history, and Buddhist studies.
+    color_scheme:
+      primary: "2E4A62"
+      secondary: "5D8C6A"
+      accent: "C9A962"
+      background: "F9F6F1"
+      card_bg: "FFFFFF"
+      text_primary: "2A2A2A"
+      text_secondary: "5A5A5A"
+      text_muted: "9A9488"
+      chart_colors:
+        - "2E4A62"
+        - "5D8C6A"
+        - "C9A962"
+        - "8B6F5E"
+        - "A45B5B"
+        - "6B7B8D"
+    typography:
+      heading_font: "PingFang SC, Noto Sans SC, Helvetica Neue, Arial, sans-serif"
+      body_font: "PingFang SC, Noto Sans SC, Helvetica Neue, Arial, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 64
+        title: 34
+        subtitle: 22
+        body: 17
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 4
+      shadow:
+        blur: 0
+        offset_y: 0
+        color: "000000"
+        opacity: 0
+      border_color: "D8D0C4"
+      border_width: 1
+      gap: 24
+      left_accent_border: true
+      left_accent_width: 3
+    gradients:
+      cover_bg:
+        angle: 180
+        stops:
+          - [0, "F9F6F1"]
+          - [40, "F0EBE3"]
+          - [100, "E8E0D4"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "C9A962"]
+          - [100, "D4BC7A"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "FFFFFF"]
+          - [100, "FAF8F4"]
+    decoration:
+      pattern: none
+      icon_style: outline
+      brush_strokes: true
+      mountain_silhouette: true
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "2A2A2A"
+      section_divider:
+        background: "2E4A62"
+        text_color: "F9F6F1"
+
+  academic_classic:
+    name: Academic Classic
+    description: Deep blue and gold evokes Oxford and Harvard traditions. Authoritative, scholarly, prestigious. Ideal for academic conferences, thesis defenses, research seminars, and institutional presentations.
+    color_scheme:
+      primary: "1B3A5C"
+      secondary: "4A6B8A"
+      accent: "B8860B"
+      background: "FAFAF8"
+      card_bg: "FFFFFF"
+      text_primary: "1A1A2E"
+      text_secondary: "3D4F63"
+      text_muted: "8090A0"
+      chart_colors:
+        - "1B3A5C"
+        - "4A6B8A"
+        - "B8860B"
+        - "8B4513"
+        - "2E8B57"
+        - "6A5ACD"
+    typography:
+      heading_font: "Georgia, Cambria, PingFang SC, Noto Sans SC, serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 68
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 6
+      shadow:
+        blur: 4
+        offset_y: 2
+        color: "1B3A5C"
+        opacity: 0.06
+      border_color: "C8CDD4"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 150
+        stops:
+          - [0, "1B3A5C"]
+          - [50, "2A4E72"]
+          - [100, "3A6B90"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "B8860B"]
+          - [100, "D4A030"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "FFFFFF"]
+          - [100, "F5F5F0"]
+    decoration:
+      pattern: none
+      icon_style: outline
+      double_border: true
+      classical_divider: true
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "FFFFFF"
+      section_divider:
+        background: "1B3A5C"
+        text_color: "FFFFFF"
+
+  parchment:
+    name: Parchment
+    description: Warm parchment tones with antique bronze accents. Storytelling, warm, literary. Ideal for humanities education, narrative presentations, book talks, and cultural lectures.
+    color_scheme:
+      primary: "5C3D2E"
+      secondary: "8B7355"
+      accent: "8B2500"
+      background: "F5F0E8"
+      card_bg: "FFFEF9"
+      text_primary: "3A2820"
+      text_secondary: "6B5B4E"
+      text_muted: "A09080"
+      chart_colors:
+        - "5C3D2E"
+        - "8B7355"
+        - "8B2500"
+        - "556B2F"
+        - "4A6B8A"
+        - "8B6F5E"
+    typography:
+      heading_font: "Georgia, Cambria, PingFang SC, Noto Sans SC, serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 64
+        title: 34
+        subtitle: 22
+        body: 17
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 8
+      shadow:
+        blur: 6
+        offset_y: 2
+        color: "5C3D2E"
+        opacity: 0.05
+      border_color: "DDD0C0"
+      border_width: 1
+      gap: 22
+    gradients:
+      cover_bg:
+        angle: 150
+        stops:
+          - [0, "5C3D2E"]
+          - [50, "7A5540"]
+          - [100, "8B7355"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "8B2500"]
+          - [100, "B03020"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "FFFEF9"]
+          - [100, "F8F2E8"]
+    decoration:
+      pattern: dots
+      icon_style: filled
+      paper_texture: true
+      vignette: true
+    slide_overrides:
+      cover:
+        background: gradient:cover_bg
+        text_color: "F5F0E8"
+      section_divider:
+        background: "5C3D2E"
+        text_color: "F5F0E8"
+
+  pure_academic:
+    name: Pure Academic
+    description: Monochrome with a single academic blue accent. No shadows, no gradients, no decoration. Content-first, rational, rigorous. Ideal for analytical lectures, data-driven academic talks, and thesis presentations.
+    color_scheme:
+      primary: "222222"
+      secondary: "555555"
+      accent: "0066CC"
+      background: "FFFFFF"
+      card_bg: "FFFFFF"
+      text_primary: "222222"
+      text_secondary: "555555"
+      text_muted: "999999"
+      chart_colors:
+        - "0066CC"
+        - "222222"
+        - "888888"
+        - "BBBBBB"
+        - "3399FF"
+        - "555555"
+    typography:
+      heading_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      body_font: "Helvetica Neue, Arial, PingFang SC, Noto Sans SC, sans-serif"
+      cjk_font: "PingFang SC, Noto Sans SC, sans-serif"
+      scale:
+        hero: 72
+        title: 36
+        subtitle: 24
+        body: 18
+        small: 14
+        caption: 12
+    card_style:
+      border_radius: 0
+      shadow:
+        blur: 0
+        offset_y: 0
+        color: "000000"
+        opacity: 0
+      border_color: "DDDDDD"
+      border_width: 1
+      gap: 20
+    gradients:
+      cover_bg:
+        angle: 180
+        stops:
+          - [0, "FFFFFF"]
+          - [100, "F8F8F8"]
+      accent_bar:
+        angle: 90
+        stops:
+          - [0, "0066CC"]
+          - [100, "3399FF"]
+      card_highlight:
+        angle: 180
+        stops:
+          - [0, "FFFFFF"]
+          - [100, "FAFAFA"]
+    decoration:
+      pattern: none
+      icon_style: outline
+    slide_overrides:
+      cover:
+        background: "FFFFFF"
+        text_color: "222222"
+      section_divider:
+        background: "F5F5F5"
+        text_color: "222222"

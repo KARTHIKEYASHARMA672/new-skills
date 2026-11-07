@@ -1,0 +1,68 @@
+{
+  "title": "ChatOps Agent · Chat × Amazon Bedrock AgentCore",
+  "subtitle": "@-mention the bot — webhook → AgentCore Runtime → LiteLLM/Bedrock · per-channel memory · self-evolving skills · scheduled &amp; ambient jobs · us-west-2",
+  "footer": "① @mention → ② API Gateway → ③ webhook Lambda → ④ AgentCore Runtime → ⑤ LiteLLM → Bedrock · streaming deltas flow back as the reply · dashed = flowing request in-flight",
+  "canvas": {"w": 1480, "h": 900},
+
+  "nodes": [
+    {"id": "chat",    "x": 92,   "y": 408, "icon": "tile:lark",     "label": "Chat App",         "sub": "@mention · images"},
+    {"id": "apigw",   "x": 360,  "y": 408, "icon": "apigateway",    "label": "API Gateway",       "sub": "HTTP API"},
+    {"id": "webhook", "x": 576,  "y": 408, "icon": "lambda",        "label": "Webhook Lambda",    "sub": "verify · decrypt · ack"},
+    {"id": "runtime", "x": 800,  "y": 408, "icon": "agentcore",     "label": "AgentCore Runtime", "sub": "Claude Agent SDK"},
+    {"id": "litellm", "x": 1024, "y": 408, "icon": "tile:gateway",  "label": "LiteLLM Gateway",   "sub": "/v1/messages"},
+    {"id": "bedrock", "x": 1236, "y": 408, "icon": "bedrock",       "label": "Amazon Bedrock",    "sub": "Claude Opus 4.8"},
+
+    {"id": "eb",           "x": 360,  "y": 168, "icon": "eventbridge", "label": "EventBridge",  "sub": "1m · 1h · 7d"},
+    {"id": "dispatcher",   "x": 576,  "y": 168, "icon": "lambda",      "label": "Dispatcher",   "sub": "claim due jobs"},
+    {"id": "consolidator", "x": 896,  "y": 168, "icon": "lambda",      "label": "Consolidator", "sub": "ambient listener · Haiku"},
+    {"id": "gardener",     "x": 1130, "y": 168, "icon": "lambda",      "label": "Gardener",     "sub": "prune auto memory"},
+
+    {"id": "ddb",     "x": 470,  "y": 660, "icon": "dynamodb",       "label": "DynamoDB",         "sub": "schedules · cursor"},
+    {"id": "memory",  "x": 800,  "y": 660, "icon": "agentcore",      "label": "AgentCore Memory", "sub": "explicit·facts·summary"},
+    {"id": "s3",      "x": 1024, "y": 660, "icon": "s3",             "label": "S3 Skills",        "sub": "self-evolving · global"},
+    {"id": "secrets", "x": 250,  "y": 660, "icon": "secretsmanager", "label": "Secrets Manager",  "sub": "runtime · app creds"},
+
+    {"id": "exa",     "x": 1400, "y": 408, "icon": "tile:external",  "label": "Exa · AWS Knowledge", "sub": "web search · MCP"}
+  ],
+
+  "groups": [
+    {"kind": "region", "x": 196, "y": 80,  "w": 1136, "h": 706, "label": "AWS Cloud · Region us-west-2", "lx": 214, "ly": 98},
+    {"kind": "event",  "x": 214, "y": 126, "w": 1004, "h": 120, "label": "Event-driven jobs (EventBridge)", "lx": 230, "ly": 240},
+    {"kind": "subnet", "x": 722, "y": 354, "w": 158,  "h": 116, "label": "VPC (isolated)", "lx": 732, "ly": 371}
+  ],
+
+  "edges": [
+    {"from": "chat",    "fs": "r", "to": "apigw",   "ts": "l", "flow": "request", "label": "@mention",          "lxy": [226, 395]},
+    {"from": "apigw",   "fs": "r", "to": "webhook", "ts": "l", "flow": "request"},
+    {"from": "webhook", "fs": "r", "to": "runtime", "ts": "l", "flow": "request", "label": "InvokeAgentRuntime", "lxy": [688, 395]},
+    {"from": "runtime", "fs": "r", "to": "litellm", "ts": "l", "flow": "request", "label": "/v1/messages",       "lxy": [912, 395]},
+    {"from": "litellm", "fs": "r", "to": "bedrock", "ts": "l", "flow": "request"},
+
+    {"from": "runtime", "fs": "b", "to": "memory", "ts": "t", "flow": "tool", "label": "recall·remember", "lxy": [756, 604]},
+    {"from": "runtime", "fs": "r", "to": "s3",     "ts": "t", "flow": "tool", "label": "skills",          "lxy": [940, 492], "mids": [[823, 500], [1024, 500]]},
+    {"from": "runtime", "fs": "r", "to": "exa",    "ts": "t", "flow": "tool", "label": "web_search",      "lxy": [1400, 334], "mids": [[823, 306], [1400, 306]]},
+    {"from": "runtime", "fs": "l", "to": "secrets","ts": "t", "flow": "aux", "static": true, "mids": [[300, 470]]},
+
+    {"from": "eb",         "fs": "r", "to": "dispatcher", "ts": "l", "flow": "schedule", "label": "rate(1m)",   "lxy": [468, 155]},
+    {"from": "dispatcher", "fs": "b", "to": "webhook",    "ts": "t", "flow": "schedule", "label": "deliver",    "lxy": [600, 300]},
+    {"from": "dispatcher", "fs": "b", "to": "ddb",        "ts": "t", "flow": "schedule", "label": "claim jobs", "lxy": [470, 262], "mids": [[576, 262], [470, 262]]},
+
+    {"from": "eb",           "fs": "t", "to": "consolidator", "ts": "t", "flow": "ambient", "label": "rate(1h)", "lxy": [628, 137], "mids": [[360, 140], [896, 140]]},
+    {"from": "consolidator", "fs": "b", "to": "memory",       "ts": "t", "flow": "ambient", "label": "distill",  "lxy": [862, 566], "mids": [[896, 566], [816, 566]]},
+    {"from": "consolidator", "fs": "t", "to": "chat",         "ts": "t", "flow": "ambient", "label": "listen in", "lxy": [150, 108], "mids": [[896, 112], [92, 112]]},
+
+    {"from": "eb",       "fs": "t", "to": "gardener", "ts": "t", "flow": "garden", "label": "rate(7d)", "lxy": [760, 129], "mids": [[360, 132], [1130, 132]]},
+    {"from": "gardener", "fs": "b", "to": "memory",   "ts": "t", "flow": "garden", "label": "prune",    "lxy": [958, 592], "mids": [[1130, 592], [784, 592]]}
+  ],
+
+  "journeys": [
+    {"flow": "request",  "dur": 2.6, "hops": [["chat","apigw"],["apigw","webhook"],["webhook","runtime"],["runtime","litellm"],["litellm","bedrock"]]},
+    {"flow": "reply",    "dur": 3.0, "reverse": true, "hops": [["litellm","bedrock"],["runtime","litellm"],["webhook","runtime"],["apigw","webhook"],["chat","apigw"]]},
+    {"flow": "schedule", "dur": 2.2, "hops": [["eb","dispatcher"],["dispatcher","webhook"]]},
+    {"flow": "ambient",  "dur": 2.2, "hops": [["eb","consolidator"],["consolidator","memory"]]},
+    {"flow": "garden",   "dur": 2.6, "hops": [["eb","gardener"],["gardener","memory"]]}
+  ],
+
+  "steps": [["chat","apigw",1],["apigw","webhook",2],["webhook","runtime",3],["runtime","litellm",4],["litellm","bedrock",5]],
+  "legend": ["request","reply","schedule","ambient","garden","tool"]
+}

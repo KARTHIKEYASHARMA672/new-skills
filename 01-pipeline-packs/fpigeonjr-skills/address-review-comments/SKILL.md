@@ -1,0 +1,121 @@
+---
+name: address-review-comments
+description: Collect all open PR review comments and unresolved conversations, investigate each one, apply valid changes, push the branch, and reply to each thread with a summary. Use when the user wants to address PR feedback, respond to review comments, resolve review threads, or says things like "fix the review comments", "address feedback", or "respond to the PR review".
+argument-hint: "[PR URL or number]"
+allowed-tools: Read Grep Glob Bash Edit Write
+---
+
+# Address Review Comments
+
+## Identify the PR
+
+If `$ARGUMENTS` is provided, treat it as a PR URL or number.
+
+If no argument is given, infer the PR from the current branch:
+
+```bash
+# Get current branch
+git branch --show-current
+
+# Find associated PR
+gh pr view --json number,url,headRefName
+```
+
+If the PR cannot be determined confidently, ask for the PR URL instead of guessing.
+
+## Collect All Open Feedback
+
+Fetch every open review comment and unresolved conversation thread:
+
+```bash
+gh pr view $PR --json reviews,reviewRequests,comments
+gh api repos/{owner}/{repo}/pulls/$PR_NUMBER/comments --jq '[.[] | select(.position != null) | {id, path, line, body, user: .user.login}]'
+gh api repos/{owner}/{repo}/pulls/$PR_NUMBER/reviews --jq '[.[] | {id, state, body, user: .user.login}]'
+```
+
+Group comments by file and line so related feedback is handled together.
+
+## Investigate Before Acting
+
+For each comment:
+
+1. Read the full diff context around the flagged line
+2. Understand the reviewer's intent before touching anything
+3. Decide: **valid** (apply), **not valid** (decline with explanation), or **blocked** (stop and report)
+
+Do not batch-apply changes. Handle one comment at a time.
+
+## Apply Valid Changes
+
+Before implementation in each working checkout, load and follow [goal's implementation preflight](../goal/REFERENCE.md#implementation-preflight). Load [tdd](../tdd/SKILL.md) and its needed references for behavioral fixes; follow its public-interface RED/GREEN evidence rules. Use the harness's actual skill loader or read the linked files—naming a skill does not load it. Missing dependencies or unavailable required verification mean **blocked**, not complete.
+
+Make the minimal correct change needed to address the feedback. Do not refactor surrounding code unless the comment explicitly asks for it. Preserve earlier regression coverage; if replacing a test, explain how the original behavior remains covered and why the replacement is equivalent or stronger.
+
+After all changes are applied, run relevant local checks against the final tree, including retained regressions and new focused tests:
+
+```bash
+# Examples — adapt to the project
+npm test
+npm run lint
+python -m pytest
+make test
+```
+
+Fix any regressions before pushing. Record the tested revision, dirty state, exact commands, and results; rebuild required artifacts from the final source before claiming GREEN. A clean commit or a worker's success report is not verification. If required checks are blocked or evidence conflicts, stop and report what is unverified rather than push the implementation as complete.
+
+## Push the Branch
+
+```bash
+git add -p          # Review changes before staging
+git commit -m "Address PR review feedback"
+git push
+```
+
+## Reply to Each Thread
+
+After final-tree verification and a successful push, reply to every addressed comment with a concise summary of what changed and the relevant check evidence. Say “fixed” and resolve a thread only when its concern is verified; keep blocked or unverified concerns unresolved and report their limitations:
+
+```bash
+gh api repos/{owner}/{repo}/pulls/$PR_NUMBER/comments/$COMMENT_ID/replies \
+  --method POST \
+  --field body="Fixed in <commit-sha>: <one-sentence summary of what changed>"
+```
+
+For comments you declined to adopt, reply with a clear explanation of why the change was not applied.
+
+Resolve verified addressed threads after the push succeeds; do not automatically resolve declined feedback unless the concern is demonstrably settled or the user approves. The GitHub REST API does not expose a thread-resolution endpoint; use the GraphQL API:
+
+```bash
+gh api graphql -f query='
+  mutation ResolveThread($threadId: ID!) {
+    resolveReviewThread(input: {threadId: $threadId}) {
+      thread { isResolved }
+    }
+  }
+' -f threadId="<THREAD_NODE_ID>"
+```
+
+To get thread node IDs:
+
+```bash
+gh api graphql -f query='
+  query($owner: String!, $repo: String!, $number: Int!) {
+    repository(owner: $owner, name: $repo) {
+      pullRequest(number: $number) {
+        reviewThreads(first: 50) {
+          nodes { id isResolved comments(first: 1) { nodes { body } } }
+        }
+      }
+    }
+  }
+' -f owner="{owner}" -f repo="{repo}" -F number=$PR_NUMBER
+```
+
+If resolving via GraphQL is not practical, note in your reply that the thread can be resolved manually in the browser.
+
+## Edge Cases
+
+- **Conflicting comments**: Surface the conflict to the user before making changes.
+- **Comment on deleted line**: Check if the concern still applies in the current diff.
+- **Blocked comment**: Stop immediately and report the blocker — do not guess or work around it.
+- **PR already merged**: Report the status and stop.

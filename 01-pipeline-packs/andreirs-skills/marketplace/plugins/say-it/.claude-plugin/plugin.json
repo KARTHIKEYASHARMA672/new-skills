@@ -1,0 +1,11 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "say-it",
+  "version": "1.0.0",
+  "description": "Spoken replies via the local Voicebox MCP app: a binary /say-it toggle (on/off, off by default), the 'two channels, one answer' speaking rules, and a Stop hook that enforces the `on` mode.",
+  "author": {
+    "name": "Andrei Surdu",
+    "email": "andrei@surdu.eu"
+  },
+  "keywords": ["voice", "tts", "spoken-replies", "say-it", "voicebox"]
+}

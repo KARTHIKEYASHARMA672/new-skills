@@ -1,0 +1,11 @@
+{
+  "skill_name": "handoff-cowork",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We've spent this Cowork session debugging the daily revenue ETL. Findings so far: the `dwh_ods.payments` table in StarRocks was double-counting refunds because the DAG's dedup step keyed on transaction_id alone, but refunds reuse the original transaction_id with a negative amount. We decided to add `event_type` to the dedup key rather than filter refunds out, because downstream AB-test dashboards still need the refund rows. I created a fix at /Users/razvan.surdu/Projects/skills/tmp/dedup_fix.sql and opened Jira ticket DATA-4821 to track it. Still open: the Airflow DAG owner (Marek) hasn't approved the change, and we haven't backfilled the last 30 days. I'm out of time today — write me a handoff so I can pick this up tomorrow with a fresh chat.",
+      "expected_output": "A handoff .md saved to the user's connected folder under handoffs/ as a dated file plus HANDOFF-latest.md, with the write verified (scratchpad plus full inline content only if no folder is connected or the write fails). Uses the typed sections: metadata, current state, decisions & why (dedup key change over filtering, because dashboards need refund rows), open threads (Marek's approval, 30-day backfill), next steps, critical files referencing DATA-4821 and dedup_fix.sql by path/URL rather than pasting them, gotchas, verification state (fix written but not approved or backfilled, i.e. untested), and suggested connectors (StarRocks, Jira, Airflow/Bitbucket). Ends with a copy-paste prompt for the next chat that references HANDOFF-latest.md and tells it to read the doc, set up the listed connectors, and confirm a plan before acting.",
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "surdu-skills",
+  "description": "Andrei Surdu's personal Claude Code marketplace — plugins built from the skills library.",
+  "owner": {
+    "name": "Andrei Surdu",
+    "email": "andrei@surdu.eu"
+  },
+  "plugins": [
+    {
+      "name": "say-it",
+      "source": "./plugins/say-it",
+      "category": "productivity"
+    }
+  ]
+}

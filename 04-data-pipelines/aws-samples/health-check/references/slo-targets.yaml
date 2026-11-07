@@ -1,0 +1,38 @@
+# SLO 目标定义（示例模板）
+# health-check 对比实际指标 vs 这里的目标。
+# 没有定义 SLO 的服务只做异常检测（超通用阈值），不做 SLO 达标判断。
+#
+# 这是一份示例。要定义你自己环境的真实 SLO，复制本文件为
+# `slo-targets.local.yaml`（已被 .gitignore，不会发布），health-check 会
+# 优先读取 .local.yaml；不存在时回退到本示例文件。
+
+payments-api:
+  description: "示例：核心支付 API"
+  tier: critical
+  availability: "99.9%"            # 月可用性目标
+  error_budget_monthly_min: 43.2   # 月错误预算（分钟）
+  latency_p99_sec: 2               # P99 延迟上限（秒）
+  targets:
+    - namespace: ContainerInsights
+      metric: pod_number_of_container_restarts
+      dimension_key: ClusterName
+      dimension_value: payments-eks
+      max_value: 0
+      note: "生产环境不应有 pod 重启"
+    - namespace: AWS/RDS
+      metric: CPUUtilization
+      dimension_key: DBClusterIdentifier
+      dimension_value: payments-aurora
+      max_value: 80
+      note: "Aurora CPU 上限"
+
+# 其他服务暂未定义 SLO。随着使用积累逐步添加，例如：
+#
+# orders-service:
+#   tier: standard
+#   availability: "99%"
+#   ...
+#
+# internal-dashboard:
+#   tier: best-effort
+#   note: "Demo 环境，无 SLO 要求"

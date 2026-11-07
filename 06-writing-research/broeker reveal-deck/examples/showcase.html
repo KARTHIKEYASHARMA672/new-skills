@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reveal Deck Toolkit</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/black.css">
+
+  <style>
+    /* ─── Variables ─────────────────────────────────────────── */
+    :root {
+      --dark:         #060A12;
+      --panel:        #0D1526;
+      --panel2:       #101E35;
+      --accent:       #AAFF00;
+      --amber:        #FFB020;
+      --red:          #FF4D4D;
+      --text:         #DCE8F5;
+      --muted:        #7A9BBF;
+      --border:       rgba(170,255,0,0.15);
+      --border-amber: rgba(255,176,32,0.18);
+      --glow:         rgba(170,255,0,0.25);
+    }
+
+    /* ─── Dot-grid + bottom bar ────────────────────────────── */
+    .reveal-viewport::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, rgba(170,255,0,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none; z-index: 0;
+    }
+    .reveal-viewport::after {
+      content: '';
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--amber), var(--accent));
+      z-index: 100;
+    }
+
+    /* ─── Base ──────────────────────────────────────────────── */
+    .reveal {
+      font-family: 'Source Serif 4', Georgia, serif;
+      color: var(--text);
+      background: var(--dark);
+    }
+    .reveal .slides { text-align: left; }
+    .reveal .slides section {
+      text-align: left;
+      height: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    /* ─── Typography — strict font assignment ──────────────── */
+    .reveal h1 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      line-height: 0.95;
+      margin: 0;
+    }
+    .reveal h2 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 1.5em;
+      margin: 0 0 0.15em 0;
+    }
+    .reveal h3 {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      font-size: 1.1em;
+      color: var(--accent);
+      margin: 0 0 0.1em 0;
+    }
+    .reveal p {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.78em;
+      line-height: 1.5;
+      color: var(--text);
+      margin: 0.2em 0;
+    }
+    .reveal ul { list-style: none; margin: 0; padding: 0; display: block; }
+    .reveal ul li {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.74em;
+      line-height: 1.5;
+      padding: 0.15em 0 0.15em 1.2em;
+      position: relative;
+      color: var(--text);
+    }
+    .reveal ul li::before {
+      content: '\25B8';
+      color: var(--accent);
+      position: absolute;
+      left: 0;
+      font-size: 0.8em;
+      top: 0.3em;
+    }
+    code, .reveal code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.78em;
+      color: var(--accent);
+      background: rgba(170,255,0,0.08);
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+    }
+    .reveal a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(170,255,0,0.3);
+    }
+
+    /* ─── Z-index stacking ─────────────────────────────────── */
+    section > *:not(.bolt-bg):not(.bolt-corner):not(.motif-bg) {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── Accent line ──────────────────────────────────────── */
+    .accent-line {
+      width: 48px; height: 3px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      margin-bottom: 0.3em;
+    }
+    .accent-line.amber {
+      background: linear-gradient(90deg, var(--amber), transparent);
+    }
+
+    /* ─── Slide tag ────────────────────────────────────────── */
+    .slide-tag {
+      display: inline-block;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.5em;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.3em;
+      opacity: 0.7;
+    }
+    .section-label {
+      display: block;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.52em;
+      color: var(--amber);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 0.3em;
+    }
+
+    /* ─── Layout ───────────────────────────────────────────── */
+    .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7em; }
+    .cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.7em; }
+    .glow { color: var(--accent); text-shadow: 0 0 40px rgba(170,255,0,0.4); }
+
+    /* ─── Motif ────────────────────────────────────────────── */
+    .motif-bg {
+      position: absolute;
+      font-size: 18em; opacity: 0.03;
+      pointer-events: none; user-select: none;
+      line-height: 1; z-index: 0;
+    }
+    .bolt-sm {
+      font-size: 0.85em;
+      opacity: 0.65;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .bolt-sm.cyan  { color: var(--accent); }
+    .bolt-sm.amber { color: var(--amber); }
+
+    /* ─── Panel ────────────────────────────────────────────── */
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.55em 0.85em;
+    }
+    .panel.amber { border-color: var(--border-amber); }
+    .panel-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.55em;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.3em;
+      display: block;
+    }
+    .panel-label.amber { color: var(--amber); }
+    .panel p, .panel li { font-size: 0.80em; line-height: 1.3; }
+
+    /* ─── Callout ──────────────────────────────────────────── */
+    .callout {
+      background: rgba(170,255,0,0.05);
+      border-left: 3px solid var(--accent);
+      padding: 0.4em 0.8em;
+      border-radius: 0 4px 4px 0;
+      margin-top: 0.5em;
+    }
+    .callout.amber {
+      background: rgba(255,176,32,0.05);
+      border-left-color: var(--amber);
+    }
+    .callout p { margin: 0; font-size: 0.72em; }
+
+    /* ─── Badge ────────────────────────────────────────────── */
+    .badge {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.5em;
+      color: var(--amber);
+      background: rgba(255,176,32,0.1);
+      border: 1px solid rgba(255,176,32,0.3);
+      padding: 0.15em 0.5em;
+      border-radius: 3px;
+      vertical-align: middle;
+    }
+
+    /* ─── Filepath ─────────────────────────────────────────── */
+    .filepath {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.68em;
+      color: var(--amber);
+      background: rgba(255,176,32,0.07);
+      border: 1px solid rgba(255,176,32,0.2);
+      padding: 0.2em 0.55em;
+      border-radius: 3px;
+      display: inline-block;
+      margin-bottom: 0.4em;
+    }
+    .filepath.green {
+      color: var(--accent);
+      background: rgba(170,255,0,0.06);
+      border-color: rgba(170,255,0,0.2);
+    }
+
+    /* ─── Codeblock ────────────────────────────────────────── */
+    .codeblock {
+      background: #0a0f1a;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.5em 0.8em;
+      overflow-x: auto;
+    }
+    .codeblock-header {
+      display: flex; align-items: center; gap: 0.35rem;
+      padding-bottom: 0.35em; margin-bottom: 0.35em;
+      border-bottom: 1px solid rgba(170,255,0,0.08);
+    }
+    .codeblock-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .codeblock pre {
+      margin: 0; font-size: 0.6em; line-height: 1.55;
+      color: var(--accent); white-space: pre-wrap;
+    }
+
+    /* ─── Stat ─────────────────────────────────────────────── */
+    .stat { text-align: center; }
+    .stat-number {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 3.5em; font-weight: 700;
+      color: var(--accent); line-height: 1; display: block;
+    }
+    .stat.amber .stat-number { color: var(--amber); }
+    .stat-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.85em; font-weight: 600;
+      color: var(--text); display: block;
+    }
+    .stat-context {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.5em; color: var(--muted); display: block;
+    }
+
+    /* ─── Step list ────────────────────────────────────────── */
+    .step {
+      display: flex; align-items: flex-start;
+      gap: 0.6em; margin-bottom: 0.35em;
+    }
+    .step-n {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700; font-size: 0.7em;
+      color: var(--dark); background: var(--accent);
+      width: 1.5em; height: 1.5em;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-body {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.72em; line-height: 1.4;
+      color: var(--text);
+    }
+
+    /* ─── Icon grid ────────────────────────────────────────── */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8em;
+      margin-top: 0.4em;
+    }
+    .icon-grid-item { text-align: center; }
+    .icon-grid-icon { font-size: 1.6em; display: block; margin-bottom: 0.2em; }
+    .icon-grid-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600; font-size: 0.72em;
+      color: var(--text); display: block;
+    }
+    .icon-grid-desc {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.5em; color: var(--muted); display: block;
+    }
+
+    /* ─── Flow ─────────────────────────────────────────────── */
+    .flow {
+      display: flex; align-items: center;
+      gap: 0.3em; flex-wrap: wrap; margin-top: 0.5em;
+    }
+    .flow-step {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.35em 0.6em;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.58em; color: var(--text);
+    }
+    .flow-step.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 12px var(--glow);
+    }
+    .flow-arrow {
+      color: var(--accent);
+      font-size: 0.75em; font-weight: bold;
+    }
+
+    /* ─── Timeline ─────────────────────────────────────────── */
+    .timeline {
+      display: flex; justify-content: space-between;
+      position: relative; margin-top: 1.2em; padding-top: 0.5em;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute; top: 0; left: 5%; right: 5%;
+      height: 2px; background: var(--border);
+    }
+    .tl-item { text-align: center; flex: 1; position: relative; }
+    .tl-dot {
+      width: 10px; height: 10px;
+      background: var(--muted);
+      border-radius: 50%; display: block;
+      margin: -6px auto 0.3em;
+    }
+    .tl-item.active .tl-dot {
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--glow);
+    }
+    .tl-date {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.48em; color: var(--amber); display: block;
+      margin-bottom: 0.5em;
+    }
+    .tl-label {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.5em; color: var(--text); display: block;
+    }
+
+    /* ─── Comparison ───────────────────────────────────────── */
+    .compare {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.55em 0.85em;
+    }
+    .compare.bad  { border-left: 3px solid var(--red); }
+    .compare.good { border-left: 3px solid var(--accent); }
+    .label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.48em; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      display: inline-block;
+      padding: 0.15em 0.5em; border-radius: 3px;
+      margin-bottom: 0.3em;
+    }
+    .label.bad  { color: var(--red);    background: rgba(255,77,77,0.1); }
+    .label.good { color: var(--accent); background: rgba(170,255,0,0.1); }
+
+    /* ─── Quote ────────────────────────────────────────────── */
+    .pull-quote { text-align: center; max-width: 75%; margin: 0 auto; padding: 1em 0; }
+    .pull-quote::before {
+      content: '\201C';
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 3.5em; color: var(--accent);
+      opacity: 0.3; line-height: 0.5; display: block;
+    }
+    .pull-quote-text {
+      font-family: 'Source Serif 4', serif;
+      font-size: 1em; font-style: italic;
+      color: var(--text); line-height: 1.55;
+      border: none; margin: 0; padding: 0;
+    }
+    .pull-quote-cite {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.48em; color: var(--muted);
+      display: block; margin-top: 0.6em;
+    }
+    .pull-quote-role { color: var(--amber); }
+
+    /* ─── Key item ─────────────────────────────────────────── */
+    .key-item {
+      display: flex; align-items: flex-start; gap: 0.8em;
+      padding: 0.18em 0;
+      border-bottom: 1px solid rgba(170,255,0,0.07);
+    }
+    .key-item:last-child { border-bottom: none; }
+    .key-num {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.4em; font-weight: 700;
+      color: var(--accent); min-width: 1.5em; line-height: 1.1;
+    }
+    .key-text {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.78em; color: var(--text); line-height: 1.55;
+    }
+
+    /* ─── File tree ────────────────────────────────────────── */
+    .file-tree {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.6em; line-height: 1.7;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.6em 0.85em;
+    }
+    .ft-dir  { color: var(--accent); font-weight: 600; }
+    .ft-file { color: var(--text); }
+    .ft-cmnt { color: var(--muted); font-style: italic; }
+    .ft-arr  { color: var(--amber); }
+
+    /* ─── Screenshot frame ─────────────────────────────────── */
+    .screenshot-frame {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(170,255,0,0.04);
+    }
+    .screenshot-chrome {
+      display: flex; align-items: center; gap: 0.35rem;
+      padding: 0.35rem 0.6rem;
+      background: #0D1526;
+      border-bottom: 1px solid var(--border);
+    }
+    .mac-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+    .mac-dot.red    { background: #FF5F57; }
+    .mac-dot.yellow { background: #FFBD2E; }
+    .mac-dot.green  { background: #28CA41; }
+    .screenshot-url {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.42em; color: var(--muted);
+      margin-left: 0.4rem;
+      background: rgba(0,0,0,0.3);
+      padding: 0.12em 0.5em;
+      border-radius: 3px;
+    }
+
+    /* ─── Table ────────────────────────────────────────────── */
+    .reveal table { width: 100%; border-collapse: collapse; }
+    .reveal thead th {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.55em;
+      background: var(--panel2);
+      color: var(--text);
+      padding: 0.4em 0.7em;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+    }
+    .reveal td {
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.62em;
+      padding: 0.35em 0.7em;
+      border-bottom: 1px solid rgba(170,255,0,0.06);
+      color: var(--text);
+    }
+    .reveal td:first-child { color: var(--accent); font-weight: 600; }
+
+    /* ─── Closing links ────────────────────────────────────── */
+    .closing-links { margin-top: 0.8em; }
+    .closing-link {
+      display: flex; align-items: center; gap: 0.5em;
+      padding: 0.2em 0;
+      border-bottom: 1px solid rgba(170,255,0,0.07);
+    }
+    .closing-link-label {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.48em; color: var(--amber);
+      min-width: 5em;
+    }
+    .closing-link a { font-size: 0.62em; }
+
+    /* ─── Split layout ─────────────────────────────────────── */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 100%;
+    }
+    .split-visual {
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5em; overflow: hidden; position: relative;
+    }
+    .split-content {
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 1em 2em;
+    }
+
+    /* ─── Reveal chrome ────────────────────────────────────── */
+    .reveal .progress { color: var(--accent); height: 2px; }
+    .reveal .slide-number {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.55em; color: var(--muted);
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ═══════════════════════════════════════════════════════════
+     TITLE
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="top:-0.05em;right:-0.12em;color:var(--accent)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:1em 2em;">
+    <span style="font-family:'Fira Code',monospace;font-size:0.52em;color:var(--muted);letter-spacing:0.22em;text-transform:uppercase;display:block;margin-bottom:0.6em;">Reveal Deck Toolkit</span>
+    <h1 style="font-size:3.5em;letter-spacing:-0.01em;">
+      Kill Your<br><span style="color:var(--accent);">Slide Deck</span>
+    </h1>
+    <div style="width:80px;height:3px;background:linear-gradient(90deg,var(--accent),var(--amber));margin:0.55em 0 1em;"></div>
+    <p style="color:var(--muted);font-size:0.72em;line-height:1.55;margin:0;">
+      Then rebuild it in minutes with AI.
+    </p>
+    <p style="margin-top:0.6em;font-family:'Fira Code',monospace;font-size:0.48em;color:var(--muted);opacity:0.55;letter-spacing:0.12em;">
+      BUILT FOR CLAUDE CODE
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THE PROBLEM
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="bottom:-0.15em;left:-0.1em;color:var(--amber)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{001}</span>
+    <div class="accent-line"></div>
+    <h2><span class="bolt-sm amber">&#9889;</span> You've Seen This Deck Before</h2>
+
+    <div class="cols-2" style="margin-top:0.3em;">
+      <div class="compare bad">
+        <span class="label bad">EVERY CONFERENCE EVER</span>
+        <ul>
+          <li>White background, blue title</li>
+          <li>Clip art from 2009</li>
+          <li>17 bullet points per slide</li>
+          <li>Comic Sans in the wild</li>
+          <li>"I can't read that from the back"</li>
+        </ul>
+      </div>
+      <div class="compare good">
+        <span class="label good">WHAT YOU ACTUALLY WANT</span>
+        <ul>
+          <li>Cinematic dark theme</li>
+          <li>Thoughtful typography</li>
+          <li>Data that breathes</li>
+          <li>Code that looks beautiful</li>
+          <li>"Wait, how did you make this?"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THE PITCH — pull quote + backdrop
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-image="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1280&q=80"
+         data-background-size="cover"
+         data-background-opacity="0.2">
+  <span class="motif-bg" style="top:-0.05em;right:-0.12em;color:var(--accent)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <div class="pull-quote">
+      <blockquote class="pull-quote-text" style="font-size:1.15em;">
+        What if you could describe what you want<br>and have a
+        production-quality deck in minutes?
+      </blockquote>
+      <cite class="pull-quote-cite">
+        Not a template. Not a theme. <span class="pull-quote-role">A system.</span>
+      </cite>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION DIVIDER — The Journey
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1280&q=80"
+         data-background-size="cover"
+         data-background-opacity="0.15"
+         data-transition="zoom">
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="section-label">THE JOURNEY</span>
+    <h1 style="font-size:3em;color:var(--accent);">From Notes<br>to Stage</h1>
+    <p style="color:var(--muted);max-width:55%;">You bring the ideas. We bring the design system.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FLOW — the pipeline
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="top:-0.05em;right:-0.1em;color:var(--amber)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{004}</span>
+    <div class="accent-line"></div>
+    <h2><span class="bolt-sm cyan">&#9889;</span> How It Works</h2>
+    <p style="max-width:70%;">Drop your notes, answer a few questions, get a deck you're proud of.</p>
+
+    <div class="flow" style="margin-top:0.8em;">
+      <span class="flow-step">Rough Notes</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">Quick Interview</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step active">Full Deck</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">Iterate by Slide</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-step">Present</span>
+    </div>
+
+    <div class="callout" style="margin-top:0.7em;max-width:70%;">
+      <p>No HTML knowledge needed. No CSS. No design skills. Just your content and a conversation with Claude.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CODE — your input + step list
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="bottom:-0.15em;right:-0.1em;color:var(--accent)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{005}</span>
+    <div class="accent-line"></div>
+    <h2>Your Input</h2>
+    <span class="filepath green">my-talk-notes.md</span>
+
+    <div class="cols-2">
+      <div>
+        <div class="codeblock">
+          <div class="codeblock-header">
+            <span class="codeblock-dot" style="background:#FF5F56;"></span>
+            <span class="codeblock-dot" style="background:#FFBD2E;"></span>
+            <span class="codeblock-dot" style="background:#27C93F;"></span>
+          </div>
+          <pre><code>## Why We Migrated
+Legacy system was killing us.
+Downtime, slow deploys, frustration.
+
+## The New Stack
+Drupal 11, DDEV, CI/CD, the works.
+[diagram: architecture stack]
+
+## Results
+3x faster deploys
+99.9% uptime
+Team actually likes Fridays again</code></pre>
+        </div>
+      </div>
+      <div>
+        <p style="margin-top:0;">That's it. Rough notes with headings. Claude handles everything else:</p>
+        <div class="step">
+          <span class="step-n">1</span>
+          <div class="step-body">Asks about <strong style="color:var(--accent)">audience</strong> and tone</div>
+        </div>
+        <div class="step">
+          <span class="step-n">2</span>
+          <div class="step-body">Chooses <strong style="color:var(--accent)">layouts</strong> per slide content</div>
+        </div>
+        <div class="step">
+          <span class="step-n">3</span>
+          <div class="step-body">Generates <strong style="color:var(--accent)">visuals</strong> — SVGs, photos, data</div>
+        </div>
+        <div class="step">
+          <span class="step-n">4</span>
+          <div class="step-body">Writes <strong style="color:var(--accent)">speaker notes</strong> with context</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION — What You Get
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12" data-transition="zoom">
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="section-label">THE OUTPUT</span>
+    <h1 style="font-size:3em;color:var(--accent);">What You Get</h1>
+    <p style="color:var(--muted);max-width:55%;">Every slide that follows is a real component. This is the design system.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     STATS
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="top:-0.05em;left:-0.1em;color:var(--amber)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{007}</span>
+    <div class="accent-line"></div>
+    <h2>Data That Lands</h2>
+    <p style="color:var(--muted);">Numbers deserve better than a bullet point.</p>
+
+    <div class="cols-3" style="margin-top:0.8em;">
+      <div class="stat">
+        <span class="stat-number">22</span>
+        <span class="stat-label">Components</span>
+        <span class="stat-context">panels, grids, flows, charts</span>
+      </div>
+      <div class="stat amber">
+        <span class="stat-number">9</span>
+        <span class="stat-label">Layouts</span>
+        <span class="stat-context">every slide type covered</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number">&infin;</span>
+        <span class="stat-label">Combinations</span>
+        <span class="stat-context">mix and match freely</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SPLIT + SVG DIAGRAM
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <div class="split">
+    <div class="split-visual" style="background:linear-gradient(135deg,rgba(170,255,0,0.02),rgba(255,176,32,0.02));">
+      <span class="motif-bg" style="bottom:-80px;left:-50px;font-size:14em;color:var(--accent)">&#9889;</span>
+      <svg viewBox="0 0 380 320" xmlns="http://www.w3.org/2000/svg" style="width:88%;position:relative;z-index:1;">
+        <rect x="20" y="10" width="340" height="50" rx="6" fill="#AAFF00" fill-opacity="0.12" stroke="#AAFF00" stroke-opacity="0.3"/>
+        <text x="190" y="42" fill="#AAFF00" font-family="monospace" font-size="13" text-anchor="middle">Presentation Layer</text>
+        <rect x="20" y="75" width="340" height="50" rx="6" fill="#FFB020" fill-opacity="0.1" stroke="#FFB020" stroke-opacity="0.25"/>
+        <text x="190" y="107" fill="#FFB020" font-family="monospace" font-size="13" text-anchor="middle">Component System</text>
+        <rect x="20" y="140" width="160" height="50" rx="6" fill="#AAFF00" fill-opacity="0.06" stroke="#AAFF00" stroke-opacity="0.15"/>
+        <text x="100" y="172" fill="#DCE8F5" font-family="monospace" font-size="12" text-anchor="middle">Layouts</text>
+        <rect x="200" y="140" width="160" height="50" rx="6" fill="#AAFF00" fill-opacity="0.06" stroke="#AAFF00" stroke-opacity="0.15"/>
+        <text x="280" y="172" fill="#DCE8F5" font-family="monospace" font-size="12" text-anchor="middle">Themes</text>
+        <rect x="20" y="205" width="340" height="45" rx="6" fill="#0D1526" stroke="#4E6A8A" stroke-opacity="0.3"/>
+        <text x="190" y="234" fill="#7A9BBF" font-family="monospace" font-size="13" text-anchor="middle">Reveal.js 5.1</text>
+        <line x1="190" y1="60" x2="190" y2="75" stroke="#AAFF00" stroke-opacity="0.3" stroke-width="1"/>
+        <line x1="190" y1="125" x2="100" y2="140" stroke="#AAFF00" stroke-opacity="0.2" stroke-width="1"/>
+        <line x1="190" y1="125" x2="280" y2="140" stroke="#AAFF00" stroke-opacity="0.2" stroke-width="1"/>
+      </svg>
+    </div>
+    <div class="split-content">
+      <div class="accent-line"></div>
+      <h2>Diagrams.<br>Automatic.</h2>
+      <p>Claude generates theme-aware SVG graphics directly in your slides.
+      Architecture stacks, flowcharts, Venn diagrams, donut charts &mdash;
+      all in your deck's color palette.</p>
+      <p style="color:var(--muted);margin-top:0.5em;">
+        Just write <code>[diagram: architecture stack]</code> in your notes
+        and this is what you get.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ICON GRID
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="bottom:-0.15em;right:-0.1em;color:var(--accent)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{009}</span>
+    <div class="accent-line amber"></div>
+    <h2>Not Bullet Points. <span style="color:var(--accent);">This.</span></h2>
+    <p style="color:var(--muted);max-width:60%;">When your content has parallel features, we reach for the icon grid.</p>
+
+    <div class="icon-grid" style="margin-top:0.6em;">
+      <div class="icon-grid-item">
+        <span class="icon-grid-icon">&#9889;</span>
+        <span class="icon-grid-label">Instant Generation</span>
+        <span class="icon-grid-desc">Full deck from rough notes</span>
+      </div>
+      <div class="icon-grid-item">
+        <span class="icon-grid-icon">&#127912;</span>
+        <span class="icon-grid-label">Design System</span>
+        <span class="icon-grid-desc">Typography, color, spacing</span>
+      </div>
+      <div class="icon-grid-item">
+        <span class="icon-grid-icon">&#128247;</span>
+        <span class="icon-grid-label">Stock Photos</span>
+        <span class="icon-grid-desc">Unsplash, auto-selected</span>
+      </div>
+      <div class="icon-grid-item">
+        <span class="icon-grid-icon">&#128187;</span>
+        <span class="icon-grid-label">Code Slides</span>
+        <span class="icon-grid-desc">Syntax highlight, macOS chrome</span>
+      </div>
+      <div class="icon-grid-item">
+        <span class="icon-grid-icon">&#128200;</span>
+        <span class="icon-grid-label">Data Displays</span>
+        <span class="icon-grid-desc">Stats, timelines, comparisons</span>
+      </div>
+      <div class="icon-grid-item">
+        <span class="icon-grid-icon">&#127916;</span>
+        <span class="icon-grid-label">Video &amp; Media</span>
+        <span class="icon-grid-desc">YouTube, backgrounds, GIFs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     BACKDROP — cinematic image
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-image="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1280&q=80"
+         data-background-size="cover"
+         data-background-opacity="0.3">
+  <span class="motif-bg" style="top:-0.05em;right:-0.12em;color:var(--accent)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <div class="accent-line"></div>
+    <h2 style="font-size:2em;">Cinematic Backgrounds</h2>
+    <p style="max-width:50%;">Unsplash photos selected automatically to match your content and
+    the deck's dark aesthetic. Low opacity keeps text readable.
+    High opacity makes the image the star.</p>
+    <p style="color:var(--muted);margin-top:0.4em;max-width:50%;">
+      This slide uses a NASA earth-at-night photo at 30% opacity.
+      No account needed. No attribution required.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     BACKGROUND VIDEO
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-video="https://assets.mixkit.co/videos/30563/30563-720.mp4"
+         data-background-video-loop
+         data-background-video-muted
+         data-background-opacity="0.35">
+
+  <div style="display:flex;flex-direction:column;justify-content:flex-end;height:100%;padding:1em 2em;">
+    <div style="background:rgba(6,10,18,0.88);padding:0.8em 1.2em;border-radius:4px;border:1px solid var(--border);max-width:48%;">
+      <div class="accent-line"></div>
+      <h2>Video Backgrounds</h2>
+      <p style="margin:0;">Looping video behind your content. Muted, auto-playing, cinematic.
+      Free stock footage from Mixkit &mdash; or embed your own YouTube.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TIMELINE — iteration
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="bottom:-0.15em;left:-0.1em;color:var(--amber)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{012}</span>
+    <div class="accent-line amber"></div>
+    <h2><span class="bolt-sm amber">&#9889;</span> Your Talk Evolves</h2>
+    <p style="color:var(--muted);">Every slide has a name. Iterate by reference.</p>
+
+    <div class="timeline">
+      <div class="tl-item"><span class="tl-date">v1</span><span class="tl-dot"></span><span class="tl-label">First draft generated</span></div>
+      <div class="tl-item"><span class="tl-date">v2</span><span class="tl-dot"></span><span class="tl-label">"Tighten {003}"</span></div>
+      <div class="tl-item active"><span class="tl-date">v3</span><span class="tl-dot"></span><span class="tl-label">"Add diagram to {005}"</span></div>
+      <div class="tl-item"><span class="tl-date">v4</span><span class="tl-dot"></span><span class="tl-label">"Backdrop on {008}"</span></div>
+      <div class="tl-item"><span class="tl-date">Done</span><span class="tl-dot"></span><span class="tl-label">Ship it</span></div>
+    </div>
+
+    <div class="cols-2" style="margin-top:0.8em;">
+      <div class="panel">
+        <span class="panel-label">NATURAL LANGUAGE</span>
+        <p style="color:var(--muted);margin:0;">"Switch {007} from bullets to an icon-grid"</p>
+      </div>
+      <div class="panel amber">
+        <span class="panel-label amber">NAMED PATTERNS</span>
+        <p style="color:var(--muted);margin:0;">"Add a backdrop-quote to {010}"</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCREENSHOT FRAME
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="top:-0.05em;right:-0.1em;color:var(--accent)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{013}</span>
+    <div class="accent-line"></div>
+    <h2><span class="bolt-sm cyan">&#9889;</span> Show Your Work</h2>
+
+    <div class="cols-2">
+      <div>
+        <p>Screenshots get the macOS browser-frame treatment automatically.
+        Makes any tool, dashboard, or website look polished.</p>
+        <p style="color:var(--muted);margin-top:0.3em;">
+          Also wraps YouTube embeds, live terminals, and localhost demos.
+        </p>
+      </div>
+      <div>
+        <div class="screenshot-frame">
+          <div class="screenshot-chrome">
+            <span class="mac-dot red"></span>
+            <span class="mac-dot yellow"></span>
+            <span class="mac-dot green"></span>
+            <span class="screenshot-url">your-app.localhost</span>
+          </div>
+          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&q=80" alt="Code on screen"
+               style="width:100%;display:block;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     AUTO-ANIMATE 1
+     ═══════════════════════════════════════════════════════════ -->
+<section data-auto-animate data-background-color="#060A12">
+  <span class="motif-bg" style="top:-0.05em;right:-0.12em;color:var(--amber)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{014}</span>
+    <div class="accent-line"></div>
+    <h2 data-id="build-title">Your Project</h2>
+    <div class="file-tree" data-id="build-tree" style="max-width:45%;">
+      <span class="ft-dir">my-talk/</span><br>
+      &nbsp;&nbsp;<span class="ft-file">notes.md</span> <span class="ft-arr">&larr; your rough notes</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     AUTO-ANIMATE 2
+     ═══════════════════════════════════════════════════════════ -->
+<section data-auto-animate data-background-color="#060A12">
+  <span class="motif-bg" style="top:-0.05em;right:-0.12em;color:var(--amber)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{015}</span>
+    <div class="accent-line"></div>
+    <h2 data-id="build-title">Your Project</h2>
+    <div class="file-tree" data-id="build-tree" style="max-width:45%;">
+      <span class="ft-dir">my-talk/</span><br>
+      &nbsp;&nbsp;<span class="ft-file">notes.md</span> <span class="ft-cmnt"># input</span><br>
+      &nbsp;&nbsp;<span class="ft-file">index.html</span> <span class="ft-arr">&larr; generated deck</span><br>
+      &nbsp;&nbsp;<span class="ft-file">serve.sh</span> <span class="ft-cmnt"># launch script</span><br>
+      &nbsp;&nbsp;<span class="ft-dir">images/</span> <span class="ft-cmnt"># your photos</span><br>
+      &nbsp;&nbsp;<span class="ft-dir">videos/</span> <span class="ft-cmnt"># your clips</span>
+    </div>
+    <p style="color:var(--muted);margin-top:0.5em;">
+      One HTML file. No build step. No dependencies. Open it in any browser.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FRAGMENTS — progressive reveal
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="bottom:-0.15em;right:-0.1em;color:var(--accent)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{016}</span>
+    <div class="accent-line"></div>
+    <h2><span class="bolt-sm cyan">&#9889;</span> Built-In Pacing</h2>
+    <p style="color:var(--muted);">Content reveals on your schedule, not all at once.</p>
+
+    <div class="cols-2" style="margin-top:0.4em;">
+      <div>
+        <div class="key-item fragment">
+          <span class="key-num">01</span>
+          <div class="key-text"><strong style="color:var(--accent)">Fragments</strong> reveal content incrementally. Your audience stays with you.</div>
+        </div>
+        <div class="key-item fragment">
+          <span class="key-num">02</span>
+          <div class="key-text"><strong style="color:var(--accent)">Auto-animate</strong> morphs shared elements between slides. Smooth as butter.</div>
+        </div>
+        <div class="key-item fragment">
+          <span class="key-num">03</span>
+          <div class="key-text"><strong style="color:var(--accent)">Speaker notes</strong> generated on every slide with context the audience doesn't see.</div>
+        </div>
+      </div>
+      <div class="fragment">
+        <div class="panel">
+          <span class="panel-label">PRESENTER VIEW</span>
+          <p style="color:var(--muted);margin:0;">
+            Press <code>S</code> during any presentation to open the speaker view
+            with notes, upcoming slide, and timer.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     AND MORE — section
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-image="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=1280&q=80"
+         data-background-size="cover"
+         data-background-opacity="0.15"
+         data-transition="zoom">
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="section-label">AND THERE'S MORE</span>
+    <h1 style="font-size:3em;color:var(--accent);">Just Getting<br>Started</h1>
+    <p style="color:var(--muted);max-width:55%;">Everything you've seen? That's the starting point.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THE FULL KIT — table + panels
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="top:-0.05em;left:-0.12em;color:var(--amber)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{018}</span>
+    <div class="accent-line"></div>
+    <h2>The Full Component Library</h2>
+
+    <div class="cols-2">
+      <div>
+        <table>
+          <thead><tr><th>Category</th><th>Components</th></tr></thead>
+          <tbody>
+            <tr><td>Data</td><td>Stats, tables, comparisons, timelines, flows</td></tr>
+            <tr><td>Content</td><td>Panels, icon grids, step lists, key items</td></tr>
+            <tr><td>Code</td><td>Codeblocks, file trees, terminal embeds</td></tr>
+            <tr><td>Media</td><td>Photos, SVGs, video, GIFs, screenshots</td></tr>
+            <tr><td>Text</td><td>Quotes, callouts, badges, filepath labels</td></tr>
+            <tr><td>Layout</td><td>Split, columns, basement slides, agenda</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="panel" style="margin-bottom:0.45em;">
+          <span class="panel-label">LIVE TERMINALS <span class="badge">ADVANCED</span></span>
+          <p style="color:var(--muted);margin:0;">Embed a real, interactive terminal directly in a slide. Run live demos during your talk.</p>
+        </div>
+        <div class="panel amber" style="margin-bottom:0.45em;">
+          <span class="panel-label amber">BASEMENT SLIDES</span>
+          <p style="color:var(--muted);margin:0;">Hide deep-dive content below any slide. Navigate down if the audience wants more.</p>
+        </div>
+        <div class="panel">
+          <span class="panel-label">MOTIF SYSTEM</span>
+          <p style="color:var(--muted);margin:0;">Brand signature icon on every slide. Ties your deck together with a professional watermark feel.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     UNDER THE HOOD — 3 panels + callout
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-color="#060A12">
+  <span class="motif-bg" style="bottom:-0.15em;right:-0.12em;color:var(--accent)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <span class="slide-tag">{019}</span>
+    <div class="accent-line amber"></div>
+    <h2><span class="bolt-sm amber">&#9889;</span> Under the Hood</h2>
+
+    <div class="cols-3">
+      <div class="panel">
+        <span class="panel-label">REVEAL.JS 5.1</span>
+        <p style="color:var(--muted);margin:0;">Open-source, MIT licensed. Works in any browser. Loaded from CDN &mdash; no install.</p>
+      </div>
+      <div class="panel amber">
+        <span class="panel-label amber">SINGLE HTML FILE</span>
+        <p style="color:var(--muted);margin:0;">Your entire deck is one file. Email it, drop it on a server, commit it to Git.</p>
+      </div>
+      <div class="panel">
+        <span class="panel-label">VERSION CONTROL</span>
+        <p style="color:var(--muted);margin:0;">It's text, so it lives in Git. Diff changes, review PRs. Try that with PowerPoint.</p>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top:0.6em;">
+      <p><strong style="color:var(--accent)">Zero dependencies.</strong> No npm install. No build step. No webpack config. Open the file and present.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CLOSING — CTA
+     ═══════════════════════════════════════════════════════════ -->
+<section data-background-image="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1280&q=80"
+         data-background-size="cover"
+         data-background-opacity="0.15">
+  <span class="motif-bg" style="top:-0.05em;right:-0.12em;color:var(--amber)">&#9889;</span>
+
+  <div style="display:flex;flex-direction:column;justify-content:center;height:100%;padding:0.5em 2em;">
+    <div class="accent-line"></div>
+    <h2 class="glow" style="font-size:2.5em;">Your Next Talk<br>Deserves Better</h2>
+    <p style="color:var(--muted);max-width:55%;margin-top:0.5em;">
+      Stop fighting templates. Start telling your story.
+    </p>
+
+    <div class="closing-links" style="max-width:45%;">
+      <div class="closing-link">
+        <span class="closing-link-label">Install</span>
+        <a href="#">/install-skill reveal-deck</a>
+      </div>
+      <div class="closing-link">
+        <span class="closing-link-label">Build</span>
+        <a href="#">"Build me a deck about..."</a>
+      </div>
+      <div class="closing-link">
+        <span class="closing-link-label">Present</span>
+        <a href="#">./serve.sh</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /.slides -->
+</div><!-- /.reveal -->
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    progress: true,
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    backgroundTransition: 'fade',
+    center: false,
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    plugins: [ RevealNotes, RevealHighlight ]
+  });
+</script>
+</body>
+</html>

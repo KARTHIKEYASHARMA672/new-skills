@@ -1,0 +1,244 @@
+{
+  "meta": {
+    "total": 28,
+    "note": "Chart type reference for Designer Agent. Use quickLookup to find the right chart for the analysis goal."
+  },
+  "quickLookup": {
+    "compare values": ["bar", "horizontal_bar", "grouped_bar"],
+    "show change over time": ["line", "area", "dual_axis"],
+    "show composition": ["donut", "treemap", "stacked_bar"],
+    "show distribution": ["heatmap", "scatter"],
+    "show progress/KPI": ["kpi_cards", "gauge", "progress_bar"],
+    "show flow/process": ["timeline", "process_flow", "sankey", "funnel"],
+    "strategic framework": ["swot", "matrix_2x2", "concentric", "flywheel"],
+    "compare before/after": ["butterfly", "dumbbell"],
+    "show ranking": ["horizontal_bar", "bar"],
+    "show proportion": ["donut", "waterfall", "stacked_bar"]
+  },
+  "charts": {
+    "bar": {
+      "name": "Bar Chart",
+      "category": "comparison",
+      "bestFor": ["comparing 3-8 items", "ranking by value"],
+      "avoidFor": ["time series (use line)", "parts of whole (use donut)"],
+      "maxItems": 8,
+      "designNotes": "Gap = bar_width × 0.5. Label bars directly, avoid legend when possible."
+    },
+    "horizontal_bar": {
+      "name": "Horizontal Bar Chart",
+      "category": "comparison",
+      "bestFor": ["long CJK labels", "ranking lists", "survey results"],
+      "avoidFor": ["time series"],
+      "maxItems": 10,
+      "designNotes": "Preferred over vertical bars when labels are CJK text (>4 chars)."
+    },
+    "grouped_bar": {
+      "name": "Grouped Bar Chart",
+      "category": "comparison",
+      "bestFor": ["multi-series comparison", "before/after by category"],
+      "avoidFor": ["more than 3 series (too cluttered)"],
+      "maxItems": 6,
+      "designNotes": "Max 3 series. Use chart_colors[0..2]. Add legend."
+    },
+    "stacked_bar": {
+      "name": "Stacked Bar Chart",
+      "category": "comparison",
+      "bestFor": ["composition across categories", "budget allocation"],
+      "avoidFor": ["comparing individual segments (hard to read)"],
+      "maxItems": 6,
+      "designNotes": "Label segments inside bars if space permits. Show total on top."
+    },
+    "butterfly": {
+      "name": "Butterfly Chart",
+      "category": "comparison",
+      "bestFor": ["two-group comparison", "male vs female", "plan vs actual"],
+      "avoidFor": ["more than 2 groups"],
+      "maxItems": 8,
+      "designNotes": "Center axis with labels. Left bars extend left, right bars extend right."
+    },
+    "bullet": {
+      "name": "Bullet Chart",
+      "category": "comparison",
+      "bestFor": ["actual vs target", "performance against benchmark"],
+      "avoidFor": ["general comparison without targets"],
+      "maxItems": 5,
+      "designNotes": "Gray background bands for ranges, colored bar for actual, marker line for target."
+    },
+    "dumbbell": {
+      "name": "Dumbbell Chart",
+      "category": "comparison",
+      "bestFor": ["before/after", "gap analysis", "range comparison"],
+      "avoidFor": ["single values"],
+      "maxItems": 8,
+      "designNotes": "Two dots connected by a line. Color-code start vs end."
+    },
+    "line": {
+      "name": "Line Chart",
+      "category": "trend",
+      "bestFor": ["time series", "trend over periods", "continuous data"],
+      "avoidFor": ["categorical comparison (use bar)"],
+      "maxItems": 12,
+      "designNotes": "Max 3 lines. Add data points as circles. Label endpoints."
+    },
+    "area": {
+      "name": "Area Chart",
+      "category": "trend",
+      "bestFor": ["volume over time", "cumulative trends"],
+      "avoidFor": ["comparing exact values (overlapping areas obscure)"],
+      "maxItems": 12,
+      "designNotes": "Use 30-50% opacity fill. Single series preferred."
+    },
+    "stacked_area": {
+      "name": "Stacked Area Chart",
+      "category": "trend",
+      "bestFor": ["composition change over time", "market share evolution"],
+      "avoidFor": ["more than 4 series"],
+      "maxItems": 12,
+      "designNotes": "Bottom-up stacking. Label each area."
+    },
+    "dual_axis": {
+      "name": "Dual Axis Chart",
+      "category": "trend",
+      "bestFor": ["two metrics with different scales", "revenue + growth rate"],
+      "avoidFor": ["metrics with same unit (misleading)"],
+      "maxItems": 12,
+      "designNotes": "Left Y-axis for primary, right for secondary. Color-match axis labels to lines."
+    },
+    "donut": {
+      "name": "Donut Chart",
+      "category": "proportion",
+      "bestFor": ["parts of whole", "market share", "budget split"],
+      "avoidFor": ["more than 6 segments", "comparing across groups (use stacked_bar)"],
+      "maxItems": 6,
+      "designNotes": "Preferred over pie. Center: total or key metric. Use stroke-dasharray technique."
+    },
+    "treemap": {
+      "name": "Treemap",
+      "category": "proportion",
+      "bestFor": ["hierarchical composition", "many categories with sub-categories"],
+      "avoidFor": ["few items (use donut)", "time series"],
+      "maxItems": 20,
+      "designNotes": "Nested rects. Size = value. Color = category. Label inside if space permits."
+    },
+    "waterfall": {
+      "name": "Waterfall Chart",
+      "category": "proportion",
+      "bestFor": ["running total", "profit bridge", "step-by-step accumulation"],
+      "avoidFor": ["simple comparison"],
+      "maxItems": 8,
+      "designNotes": "Green for positive, red for negative, gray for total. Connector lines between bars."
+    },
+    "kpi_cards": {
+      "name": "KPI Cards",
+      "category": "indicator",
+      "bestFor": ["key metrics overview", "dashboard summary"],
+      "avoidFor": ["detailed analysis"],
+      "maxItems": 6,
+      "designNotes": "Big number (48-64px) + delta arrow + sparkline + label. Use dashboard 2x2 or 2x3 layout."
+    },
+    "gauge": {
+      "name": "Gauge Chart",
+      "category": "indicator",
+      "bestFor": ["single metric vs target", "satisfaction score", "completion rate"],
+      "avoidFor": ["multiple metrics (use progress_bar)"],
+      "maxItems": 1,
+      "designNotes": "Semicircle arc. Colored segment for value. Center number."
+    },
+    "progress_bar": {
+      "name": "Progress Bar",
+      "category": "indicator",
+      "bestFor": ["multiple completion rates", "skill levels", "feature rollout"],
+      "avoidFor": ["precise comparison (use bar chart)"],
+      "maxItems": 6,
+      "designNotes": "Label left, bar center, percentage right. Use rounded caps."
+    },
+    "radar": {
+      "name": "Radar Chart",
+      "category": "analysis",
+      "bestFor": ["multi-dimensional comparison", "skill assessment", "product evaluation"],
+      "avoidFor": ["more than 8 axes", "precise value reading"],
+      "maxItems": 8,
+      "designNotes": "5-7 axes optimal. Max 2 overlaid series. Fill with low opacity."
+    },
+    "scatter": {
+      "name": "Scatter Plot",
+      "category": "analysis",
+      "bestFor": ["correlation", "clustering", "outlier detection"],
+      "avoidFor": ["few data points (<10)"],
+      "maxItems": 50,
+      "designNotes": "Optional trend line. Color-code clusters. Size can encode third variable."
+    },
+    "matrix_2x2": {
+      "name": "2×2 Matrix",
+      "category": "analysis",
+      "bestFor": ["BCG matrix", "Eisenhower", "priority mapping", "risk assessment"],
+      "avoidFor": ["more than 2 dimensions"],
+      "maxItems": 4,
+      "designNotes": "4 quadrants with distinct fills. Label axes and quadrants. Place items as dots/icons."
+    },
+    "funnel": {
+      "name": "Funnel Chart",
+      "category": "analysis",
+      "bestFor": ["conversion rates", "sales pipeline", "filtering stages"],
+      "avoidFor": ["non-sequential data"],
+      "maxItems": 6,
+      "designNotes": "Top-down narrowing. Show absolute numbers + percentages. Use trapezoids or stacked rects."
+    },
+    "heatmap": {
+      "name": "Heatmap",
+      "category": "analysis",
+      "bestFor": ["matrix data", "correlation matrix", "time × category intensity"],
+      "avoidFor": ["few cells (<9)"],
+      "maxItems": 64,
+      "designNotes": "Color gradient from light to dark. Add value labels in cells if readable."
+    },
+    "timeline": {
+      "name": "Timeline",
+      "category": "flow",
+      "bestFor": ["historical events", "project phases", "milestones"],
+      "avoidFor": ["non-sequential data"],
+      "maxItems": 6,
+      "designNotes": "Horizontal line with nodes. Cards below. 3-6 nodes optimal."
+    },
+    "process_flow": {
+      "name": "Process Flow",
+      "category": "flow",
+      "bestFor": ["step-by-step processes", "workflows", "decision trees"],
+      "avoidFor": ["non-sequential data"],
+      "maxItems": 6,
+      "designNotes": "Boxes connected by arrows. Use chevron shapes for linear flow."
+    },
+    "sankey": {
+      "name": "Sankey Diagram",
+      "category": "flow",
+      "bestFor": ["flow distribution", "energy/budget allocation", "user journey"],
+      "avoidFor": ["simple linear flow (use process_flow)"],
+      "maxItems": 12,
+      "designNotes": "Curved paths between nodes. Width = flow volume. Color by source."
+    },
+    "swot": {
+      "name": "SWOT Analysis",
+      "category": "strategic",
+      "bestFor": ["strategic assessment", "competitive analysis"],
+      "avoidFor": ["detailed data analysis"],
+      "maxItems": 4,
+      "designNotes": "2×2 grid. Color-code: green(S), blue(O), yellow(W), red(T). 3-5 bullets per quadrant."
+    },
+    "concentric": {
+      "name": "Concentric Circles",
+      "category": "strategic",
+      "bestFor": ["layered hierarchy", "core-to-edge model", "onion model"],
+      "avoidFor": ["more than 5 layers"],
+      "maxItems": 5,
+      "designNotes": "Inner = most important. Decreasing opacity outward. Label each ring."
+    },
+    "flywheel": {
+      "name": "Flywheel / Cycle",
+      "category": "strategic",
+      "bestFor": ["closed-loop processes", "virtuous cycles", "continuous improvement"],
+      "avoidFor": ["linear processes (use process_flow)"],
+      "maxItems": 6,
+      "designNotes": "Circular arrow flow. 4-6 nodes. Center label for cycle name."
+    }
+  }
+}
