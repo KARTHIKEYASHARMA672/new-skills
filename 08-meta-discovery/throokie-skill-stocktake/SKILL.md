@@ -1,4 +1,5 @@
 ---
+name: skill-stocktake
 description: "Use when auditing Claude skills and commands for quality. Supports Quick Scan (changed skills only) and Full Stocktake modes with sequential subagent batch evaluation."
 origin: ECC
 ---
@@ -164,23 +165,23 @@ Evaluation is **holistic AI judgment** — not a numeric rubric. Guiding dimensi
 `~/.claude/skills/skill-stocktake/results.json`:
 
 **`evaluated_at`**: Must be set to the actual UTC time of evaluation completion.
-Obtain via Bash: `date -u +%Y-%m-%dT%H:%M:%SZ`. Never use a date-only approximation like `T00:00:00Z`.
+Obtain via Bash: `date -u +%Y-%m-%dT%H:%M:%SZ`. Never use a date-only approximation like `T00:00:00Z`.\
 
 ```json
 {
-  "evaluated_at": "2026-02-21T10:00:00Z",
-  "mode": "full",
-  "batch_progress": {
-    "total": 80,
-    "evaluated": 80,
-    "status": "completed"
+  \"evaluated_at\": \"2026-02-21T10:00:00Z\",
+  \"mode\": \"full\",
+  \"batch_progress\": {
+    \"total\": 80,
+    \"evaluated\": 80,
+    \"status\": \"completed\"
   },
-  "skills": {
-    "skill-name": {
-      "path": "~/.claude/skills/skill-name/SKILL.md",
-      "verdict": "Keep",
-      "reason": "Concrete, actionable, unique value for X workflow",
-      "mtime": "2026-01-15T08:30:00Z"
+  \"skills\": {
+    \"skill-name\": {
+      \"path\": \"~/.claude/skills/skill-name/SKILL.md\",
+      \"verdict\": \"Keep\",
+      \"reason\": \"Concrete, actionable, unique value for X workflow\",
+      \"mtime\": \"2026-01-15T08:30:00Z\"
     }
   }
 }

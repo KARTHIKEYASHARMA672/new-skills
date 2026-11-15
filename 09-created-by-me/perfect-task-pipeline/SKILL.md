@@ -1,6 +1,6 @@
 ---
 name: perfect-task-pipeline
-description: Use when the user gives any non-trivial task ("do X", "make X", "research X and produce X") and wants it done perfectly end-to-end - turns one vague request into a gated 7-stage pipeline: INTAKE, CLARIFY, PLAN, SQUAD, EXECUTE, VERIFY, DELIVER - with quality gates between stages and a written receipt at the end.
+description: "Use when the user gives any non-trivial task ('do X', 'make X', 'research X and produce X') and wants it done perfectly end-to-end - turns one vague request into a gated 7-stage pipeline: INTAKE, CLARIFY, PLAN, SQUAD, EXECUTE, VERIFY, DELIVER - with quality gates between stages and a written receipt at the end."
 ---
 
 # Perfect Task Pipeline
